@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sanctuary.Census.ClientData
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sanctuary.Census.ServerData.Internal", "Sanctuary.Census.ServerData.Internal\Sanctuary.Census.ServerData.Internal.csproj", "{86D2A67D-1120-425D-8064-E51AD3370711}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sanctuary.Census.Benchmarks", "Tests\Sanctuary.Census.Benchmarks\Sanctuary.Census.Benchmarks.csproj", "{3268E9A8-AC6C-4066-81C4-F7608B64F96A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,8 +40,13 @@ Global
 		{86D2A67D-1120-425D-8064-E51AD3370711}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86D2A67D-1120-425D-8064-E51AD3370711}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86D2A67D-1120-425D-8064-E51AD3370711}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3268E9A8-AC6C-4066-81C4-F7608B64F96A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3268E9A8-AC6C-4066-81C4-F7608B64F96A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3268E9A8-AC6C-4066-81C4-F7608B64F96A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3268E9A8-AC6C-4066-81C4-F7608B64F96A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{37D863F7-8D18-4D78-B91E-520F3CAEB613} = {31F4FD0F-3EA6-44E0-8CD9-1B019984FE13}
+		{3268E9A8-AC6C-4066-81C4-F7608B64F96A} = {31F4FD0F-3EA6-44E0-8CD9-1B019984FE13}
 	EndGlobalSection
 EndGlobal

@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="WeaponId">The ID of the weapon.</param>
 /// <param name="FireGroupId">The ID of the fire group.</param>
-/// <param name="WeaponId">The index of the fire group within the mapping list.</param>
+/// <param name="FireGroupIndex">The index of the fire group within the mapping list.</param>
 public record WeaponToFireGroup
 (
     uint WeaponId,
