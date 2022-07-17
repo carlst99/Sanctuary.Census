@@ -10,7 +10,7 @@ using System.Text.Json;
 namespace Sanctuary.Census.Util;
 
 /// <inheritdoc />
-public class ExpressionDataShaper<T> : IDataShaper<T>
+public class ExpressionDataShaper<T> : IDataShaper
     where T : class
 {
     private readonly Type _dataType;
@@ -45,6 +45,21 @@ public class ExpressionDataShaper<T> : IDataShaper<T>
         return shaped;
     }
 
+    /// <inheritdoc />
+    public ExpandoObject ShapeDataInverted(object entity, IEnumerable<string> propertyNames)
+    {
+        ExpandoObject shaped = new();
+        HashSet<string> exclusionList = new(propertyNames);
+
+        foreach ((string propertyName, Func<object, object?> accessor) in _propertyAccessors)
+        {
+            if (!exclusionList.Contains(propertyName))
+                shaped.TryAdd(propertyName, accessor(entity));
+        }
+
+        return shaped;
+    }
+
     private void BuildPropertyAccessors(JsonNamingPolicy nameConverter)
     {
         foreach (PropertyInfo property in typeof(T).GetProperties())
@@ -54,9 +69,9 @@ public class ExpressionDataShaper<T> : IDataShaper<T>
 
             Expression<Func<T, object?>> lambda;
 
-            if (property.PropertyType.IsPrimitive)
+            if (property.PropertyType.IsValueType)
             {
-                // Primitives are not covariant with object in a Func definition
+                // Value types are not covariant with object in a Func definition
                 // so we must explicitly convert them
                 Type funcType = typeof(Func<,>).MakeGenericType(_dataType, property.PropertyType);
                 LambdaExpression primitiveLambda = Expression.Lambda(funcType, propertyExpr, parameterExpr);

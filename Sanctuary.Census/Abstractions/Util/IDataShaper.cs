@@ -7,8 +7,7 @@ namespace Sanctuary.Census.Abstractions.Util;
 /// Represents an interface for dynamically shaping an object
 /// given a list of named properties to retrieve.
 /// </summary>
-/// <typeparam name="T">The type of the data object.</typeparam>
-public interface IDataShaper<T> where T : class
+public interface IDataShaper
 {
     /// <summary>
     /// Dynamically gets a value from the given <paramref name="entity"/>.
@@ -20,10 +19,19 @@ public interface IDataShaper<T> where T : class
 
     /// <summary>
     /// Dynamically shapes an object by taking only the
-    /// given properties off the <paramref name="entity"/>.
+    /// given properties from the <paramref name="entity"/>.
     /// </summary>
     /// <param name="entity">The entity to shape.</param>
     /// <param name="propertyNames">The properties to include in the result.</param>
     /// <returns>The shaped object.</returns>
     ExpandoObject ShapeData(object entity, IEnumerable<string> propertyNames);
+
+    /// <summary>
+    /// Dynamically shapes an object by excluding all
+    /// the given properties from the <paramref name="entity"/>.
+    /// </summary>
+    /// <param name="entity">The entity to shape.</param>
+    /// <param name="propertyNames">The properties to exclude from the result.</param>
+    /// <returns>The shaped object.</returns>
+    ExpandoObject ShapeDataInverted(object entity, IEnumerable<string> propertyNames);
 }
