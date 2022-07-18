@@ -119,6 +119,7 @@ public class CollectionBuildWorker : BackgroundService
                 }
             }
             _collectionsContext.BuildCollectionInfos();
+            _logger.LogInformation("Collections build complete");
 
             _clientDataCache.Clear();
             _serverDataCache.Clear();

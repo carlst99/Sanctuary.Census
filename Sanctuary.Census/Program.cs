@@ -1,10 +1,13 @@
+using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Sanctuary.Census.ClientData.Extensions;
 using Sanctuary.Census.Common.Objects;
+using Sanctuary.Census.Database.Migrations;
 using Sanctuary.Census.Json;
 using Sanctuary.Census.Middleware;
 using Sanctuary.Census.ServerData.Internal.Extensions;
@@ -53,6 +56,14 @@ public static class Program
 
         builder.Services.AddSingleton<CollectionsContext>();
         builder.Services.AddHostedService<CollectionBuildWorker>();
+
+        builder.Services.AddFluentMigratorCore()
+            .ConfigureRunner
+            (
+                rb => rb.AddMySql5()
+                    .WithGlobalConnectionString(builder.Configuration.GetConnectionString("SqlConnection"))
+                    .ScanIn(typeof(InitialTables20220717001).Assembly).For.Migrations()
+            );
 
         builder.Services.AddControllers()
             .AddJsonOptions(options =>
@@ -112,6 +123,13 @@ public static class Program
         app.UseRouting();
         app.UseAuthorization();
         app.MapControllers();
+
+        // Migrate database
+        using (IServiceScope scope = app.Services.CreateScope())
+        {
+            IMigrationRunner runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+            runner.MigrateUp();
+        }
 
         app.Run();
     }

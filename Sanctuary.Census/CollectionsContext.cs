@@ -169,4 +169,10 @@ public class CollectionsContext
 
         Datatypes = collectionInfos;
     }
+
+    public IEnumerable<object> GetCollectionByName(out string keyPropertyName)
+    {
+        keyPropertyName = "currency_id";
+        return Currencies.Values;
+    }
 }

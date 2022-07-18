@@ -2,9 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Sanctuary.Census.Common.Objects;
+using Sanctuary.Census.Json;
 using Sanctuary.Census.Models;
+using Sanctuary.Census.Models.Collections;
+using Sanctuary.Census.Util;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 
 namespace Sanctuary.Census.Controllers;
@@ -178,6 +182,31 @@ public class CollectionController : ControllerBase
             "world" => (CollectionCount)_collectionsContext.Worlds.Count,
             _ => GetRedirectToCensusResult()
         };
+    }
+
+    [HttpGet("get/ps2/test")]
+    public IEnumerable<ExpandoObject> Test()
+    {
+        ExpressionDataShaper<Item> shaper = new(new SnakeCaseJsonNamingPolicy());
+        Item i = _collectionsContext.Items[6013885];
+        Console.WriteLine(shaper.GetValue(i, "item_id"));
+        Console.WriteLine(shaper.GetValue(i, "item_id").GetType());
+
+        var xx = _collectionsContext.Items.Values.Where(c => shaper.GetValue(c, "item_id")?.Equals(6013885) == true);
+        Console.WriteLine(xx.Count());
+        return _collectionsContext.Items.Values
+            .Where(c => shaper.GetValue(c, "item_id")?.Equals(6013885) == true)
+            .Select(c => shaper.ShapeDataInverted(c, Array.Empty<string>()));
+
+        IEnumerable<object> col1 = _collectionsContext.GetCollectionByName(out string keyPropertyName);
+
+        foreach (object o in col1)
+        {
+            Currency c = (Currency)o;
+            ExpandoObject dyn = shaper.ShapeDataInverted(o, Array.Empty<string>());
+            dyn.TryAdd("join", shaper.ShapeDataInverted(o, Array.Empty<string>()));
+            //yield return dyn;
+        }
     }
 
     private static DataResponse<object> ConvertCollection<TValue>
